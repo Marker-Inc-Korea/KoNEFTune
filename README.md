@@ -142,6 +142,8 @@ def _inner_training_loop(...):
 
     # ...(some training code)...
 
+    if:
+        (...)
     # Maybe line 1950,
     else:
         try:
