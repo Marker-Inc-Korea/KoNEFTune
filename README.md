@@ -13,7 +13,7 @@ Random Noisy Embeddings with fine-tuning 방법론을 한국어 LLM에 간단히
 # In finetune.py
 if NEFTune:
   print("Our transformers version is 4.34.1")
-  print('transformers.trainer -> find `compute loss function`.')
+  print('transformers.trainer -> find `compute loss` or `training_step` function.')
   print("Default alpha value:", 5)
 else:
   print("Done!!")
