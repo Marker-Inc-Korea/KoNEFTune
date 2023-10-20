@@ -8,9 +8,6 @@ Random Noisy Embeddings with fine-tuning 방법론을 한국어 LLM에 간단히
 
 # Core Code
 ```python
-### add noise to embeds
-#print(model)
-#print("############## training_step here!!")
 embed_device = model.module.base_model.model.model.embed_tokens.weight.device
 embeds_init = model.module.base_model.model.model.embed_tokens.forward(inputs['input_ids'].to(embed_device))
 
@@ -29,10 +26,44 @@ inputs['input_ids'] = None
 ```
 You can apply above code, in your custom code.  
 Or you also apply [NEFTune function](https://github.com/neelsjain/NEFTune/tree/main).  
+
+```python
+trainer = transformers.Trainer(
+    model=model,
+    train_dataset=train_data,
+    eval_dataset=val_data,
+    args=transformers.TrainingArguments(
+        per_device_train_batch_size=micro_batch_size,
+        gradient_accumulation_steps=gradient_accumulation_steps,
+        warmup_steps=warmup_steps,
+        num_train_epochs=num_epochs,
+        learning_rate=learning_rate,
+        # dataloader_num_workers=16,
+        fp16=True,
+        logging_steps=1,
+        optim="adamw_torch",
+        evaluation_strategy="steps" if val_set_size > 0 else "no",
+        save_strategy="steps",
+        eval_steps = 200 if val_set_size > 0 else None,
+        save_steps = 50, # oringinal: 1000
+        lr_scheduler_type=lr_scheduler,
+        output_dir=output_dir,
+        save_total_limit=2,
+        load_best_model_at_end=True if val_set_size > 0 else False,
+        ddp_find_unused_parameters=False, #if ddp else None,
+        group_by_length=group_by_length,
+        report_to="wandb" if use_wandb else None,
+        run_name=wandb_run_name if use_wandb else None,
+    ),
+    data_collator=transformers.DataCollatorForSeq2Seq(
+        tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
+    ),
+    # callbacks=[SavePeftModelCallback, LoadBestPeftModelCallback], # ONLY USE LoadBestPeftModelCallback if val_set_size > 0
+)
+```
+You can see some sample KoNEFTune code in [here](./KoNEFT_transformers).  
   
 # Method: How to applying code
-(coming soon...)  
-  
 ```python
 # In trainer.py, maybe line 2750.
 def training_step(self, model: nn.Module, inputs: Dict[str, Union[torch.Tensor, Any]]) -> torch.Tensor:
@@ -160,8 +191,8 @@ if NEFTune:
 else:
   print("Done!!")
 ```
-> Consider the `transformers` version.
-
+> Consider the `transformers` version.  
+  
 # Model benchmark
 (coming soon...)  
 
