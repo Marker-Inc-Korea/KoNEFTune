@@ -61,7 +61,7 @@ trainer = transformers.Trainer(
     # callbacks=[SavePeftModelCallback, LoadBestPeftModelCallback], # ONLY USE LoadBestPeftModelCallback if val_set_size > 0
 )
 ```
-You can see some sample KoNEFTune code in [here](./KoNEFT_transformers).  
+You can see some `Trainer class` sample code in [KoNEFTune](./KoNEFT_transformers).  
   
 # Method: How to applying code
 ```python
