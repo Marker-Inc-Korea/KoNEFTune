@@ -32,7 +32,7 @@ Or you also apply [NEFTune function](https://github.com/neelsjain/NEFTune/tree/m
   
 # Method: How to applying code
 (coming soon...)  
-
+  
 ```python
 # In trainer.py, maybe line 2750.
 def training_step(self, model: nn.Module, inputs: Dict[str, Union[torch.Tensor, Any]]) -> torch.Tensor:
@@ -57,9 +57,7 @@ def training_step(self, model: nn.Module, inputs: Dict[str, Union[torch.Tensor, 
     model.train()
     inputs = self._prepare_inputs(inputs)
 
-    ### add noise to embeds
-    #print(model)
-    #print("############## training_step here!!")
+    # Define embeddings
     embed_device = model.module.base_model.model.model.embed_tokens.weight.device
     embeds_init = model.module.base_model.model.model.embed_tokens.forward(inputs['input_ids'].to(embed_device))
 
@@ -98,7 +96,7 @@ def training_step(self, model: nn.Module, inputs: Dict[str, Union[torch.Tensor, 
     return loss.detach() / self.args.gradient_accumulation_steps
 ```
 You change `training_step` function like above code.  
-
+  
 # Consideration (Some trick option)
 ```python
 # In trainer.py, maybe line 1598.
@@ -152,7 +150,7 @@ def _inner_training_loop(...):
     return TrainOutput(self.state.global_step, train_loss, metrics)
 ```
 I add the *try~except* condition in `clip_grad_norm_` and `self.optimizer.step()`.   
-
+  
 ```python
 # In finetune.py
 if NEFTune:
