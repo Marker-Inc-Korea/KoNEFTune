@@ -1,5 +1,5 @@
 # KoNEFTune
-![KpNEFT](./KoNEFT.png)  
+![KpNEFT](./Koisy-llama/Koisy_llama.JPG)  
 <div align='center'>
 <strong>Random Noisy Embeddings with fine-tuning 방법론을 한국어 LLM에 간단히 적용할 수 있는 repo</strong>
     
