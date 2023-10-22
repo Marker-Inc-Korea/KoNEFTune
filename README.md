@@ -133,7 +133,7 @@ class LlamaModel(LlamaPreTrainedModel):
         # Below ... embed positions and training ...
 ```
 Second, we modify the ```LlamaModel Class```.   
-> You can see the [our modified code]('./KoNEFT_transformers/).  
+> You can see the [our modified code]('./KoNEFT_transformers).  
     
 ```python
 # In finetune.py
