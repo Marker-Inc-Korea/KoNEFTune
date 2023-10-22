@@ -159,7 +159,7 @@ else:
 ```
 
 # Hyperparameters
-## Ko-Platypus2-13B-NE-v1
+## Kosy-Platypus2-13B-NE-v1
 | Hyperparameter      | Value 13B |
 |---------------------|--------|
 | learning rate       | 4e-4   |
@@ -184,7 +184,7 @@ else:
 | Noisy alpha         | 15      |
 | Distribution        | Uniform |
 
-## Ko-Platypus2-13B-NE-v2
+## Kosy-Platypus2-13B-NE-v2
 (coming soon...)
 | Hyperparameter      | Value 13B |
 |---------------------|--------|
@@ -235,9 +235,9 @@ You can apply above code, in your custom code.
 When use above code, you need to add this code maybe in ```trainer.py -> 'training_step' function```.  
   
 # TODO
-- [x] Introduced the KoNEFT method.
-- [ ] Training Ko-platypus.  
-- [ ] Traingin KoR-Orca-Platypus.    
+- [x] Introduced the NEFTune method.
+- [ ] Training Kosy-platypus.  
+- [ ] Training Kosy-Orca-Platypus.    
 - [ ] User can adjust the noisy_alpha with config(parser).  
   
 # References
@@ -252,5 +252,3 @@ I use [Playground_AI](https://playgroundai.com/) site.
 Using stable-diffusion-XL and filter(Pixel_art), I made the Kosy🍵llama character. (Cosy: 아늑한)  
 
 +) 말풍선 reference: [pinterest](https://www.pinterest.es/pin/975099756801242167/)  
-
-
