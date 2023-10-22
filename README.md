@@ -8,7 +8,6 @@ Random Noisy Embeddings with fine-tuning 방법론을 한국어 LLM에 간단히
 
 # Core Code
 ```python
-## In trainer.py, define below function.
 from torch.nn import functional as F
 def NEFTune(model, noise_alpha=5):
     def noised_embed(orig_embed, noise_alpha):
@@ -27,175 +26,114 @@ def NEFTune(model, noise_alpha=5):
     ##### For a different model, you need to change the attribute path to the embedding #####
     model.module.base_model.model.model.embed_tokens.forward = noised_embed(model.module.base_model.model.model.embed_tokens, noise_alpha)
     return model
-
-## In trainer.py, maybe line 1844
-# Define add noise
-print(model)
-model = NEFTune(model, noise_alpha=15)
-model.zero_grad()
 ```
 You need to consider the ```embed_tokens``` location in your base model.  
 
+# Method: Applying Noisy Embedding
 ```python
-trainer = transformers.Trainer(
-    model=model,
-    train_dataset=train_data,
-    eval_dataset=val_data,
-    args=transformers.TrainingArguments(
-        per_device_train_batch_size=micro_batch_size,
-        gradient_accumulation_steps=gradient_accumulation_steps,
-        warmup_steps=warmup_steps,
-        num_train_epochs=num_epochs,
-        learning_rate=learning_rate,
-        # dataloader_num_workers=16,
-        fp16=True,
-        logging_steps=1,
-        optim="adamw_torch",
-        evaluation_strategy="steps" if val_set_size > 0 else "no",
-        save_strategy="steps",
-        eval_steps = 200 if val_set_size > 0 else None,
-        save_steps = 50, # oringinal: 1000
-        lr_scheduler_type=lr_scheduler,
-        output_dir=output_dir,
-        save_total_limit=2,
-        load_best_model_at_end=True if val_set_size > 0 else False,
-        ddp_find_unused_parameters=False, #if ddp else None,
-        group_by_length=group_by_length,
-        report_to="wandb" if use_wandb else None,
-        run_name=wandb_run_name if use_wandb else None,
-    ),
-    data_collator=transformers.DataCollatorForSeq2Seq(
-        tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
-    ),
-    # callbacks=[SavePeftModelCallback, LoadBestPeftModelCallback], # ONLY USE LoadBestPeftModelCallback if val_set_size > 0
-)
-```
-You can see some `Trainer class` sample code in [KoNEFTune](./KoNEFT_transformers).   
+# In finetune.py
+model = LlamaForCausalLM.from_pretrained(
+    base_model,
+    load_in_8bit=True,
+    torch_dtype=torch.float16,
+    device_map=device_map)
 
-# Training code
-(coming soon...)
-  
-# Method: How to applying code
+# Original
+tokenizer = LlamaTokenizer.from_pretrained(base_model) # Llama2
+print(type(model)) # <class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'>
+```
+Here, you can see the model class is ```LlamaForCausalLM```.  
+**Now, You need to follow the below two steps!**  
+   
 ```python
-# In trainer.py, maybe line 2750.
-def training_step(self, model: nn.Module, inputs: Dict[str, Union[torch.Tensor, Any]]) -> torch.Tensor:
-    """
-    Perform a training step on a batch of inputs.
+class LlamaForCausalLM(LlamaPreTrainedModel):
+    _tied_weights_keys = ["lm_head.weight"]
 
-    Subclass and override to inject custom behavior.
+    def __init__(self, config):
+        (... Define Model...)
 
-    Args:
-        model (`nn.Module`):
-            The model to train.
-        inputs (`Dict[str, Union[torch.Tensor, Any]]`):
-            The inputs and targets of the model.
+    # We modify the below code.
+    @add_start_docstrings_to_model_forward(LLAMA_INPUTS_DOCSTRING)
+    @replace_return_docstrings(output_type=CausalLMOutputWithPast, config_class=_CONFIG_FOR_DOC)
+    def forward(
+        self,
+        input_ids: torch.LongTensor = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.LongTensor] = None,
+        past_key_values: Optional[List[torch.FloatTensor]] = None,
+        inputs_embeds: Optional[torch.FloatTensor] = None,
+        labels: Optional[torch.LongTensor] = None,
+        use_cache: Optional[bool] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+    ) -> Union[Tuple, CausalLMOutputWithPast]:
 
-            The dictionary will be unpacked before being fed to the model. Most models expect the targets under the
-            argument `labels`. Check your model's documentation for all accepted arguments.
+    output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
+    output_hidden_states = (
+        output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
+    )
+    return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
-    Return:
-        `torch.Tensor`: The tensor with training loss on this batch.
-    """
+    # decoder outputs consists of (dec_features, layer_state, dec_hidden, dec_attn)
+    training_option = self.model.training # We add this.
+    outputs = self.model(
+        train_opt = training_option, # We add this.
+        input_ids=input_ids,
+        attention_mask=attention_mask,
+        position_ids=position_ids,
+        past_key_values=past_key_values,
+        inputs_embeds=inputs_embeds,
+        use_cache=use_cache,
+        output_attentions=output_attentions,
+        output_hidden_states=output_hidden_states,
+        return_dict=return_dict,
+    )
 
-    model.train()
-    inputs = self._prepare_inputs(inputs)
+    # Below ... embed positions and training ...
 
-    # Define embeddings
-    embed_device = model.module.base_model.model.model.embed_tokens.weight.device
-    embeds_init = model.module.base_model.model.model.embed_tokens.forward(inputs['input_ids'].to(embed_device))
-
-    ### add noise to embeds
-    input_mask = inputs['attention_mask'].to(embeds_init) # B x L
-    input_lengths = torch.sum(input_mask, 1) # B
-    
-    noise_ = torch.zeros_like(embeds_init).uniform_(-1,1)
-    delta = noise_ * input_mask.unsqueeze(2)
-    dims = input_lengths * embeds_init.size(-1)
-    mag = 5 / torch.sqrt(dims) # args.neftune_alpha / torch.sqrt(dims) // alpha-> 5
-    delta = (delta * mag.view(-1, 1, 1)).detach()
-    inputs['inputs_embeds'] = delta + embeds_init
-    inputs['input_ids'] = None
-    ### add noise to embeds
-
-    if is_sagemaker_mp_enabled():
-        loss_mb = smp_forward_backward(model, inputs, self.args.gradient_accumulation_steps)
-        return loss_mb.reduce_mean().detach().to(self.args.device)
-
-    with self.compute_loss_context_manager():
-        loss = self.compute_loss(model, inputs)
-
-    if self.args.n_gpu > 1:
-        loss = loss.mean()  # mean() to average on multi-gpu parallel training
-    loss.requires_grad_(True)
-
-    if self.do_grad_scaling:
-        self.scaler.scale(loss).backward()
-    elif self.use_apex:
-        with amp.scale_loss(loss, self.optimizer) as scaled_loss:
-            scaled_loss.backward()
-    else:
-        self.accelerator.backward(loss) # here
-
-    return loss.detach() / self.args.gradient_accumulation_steps
 ```
-You change `training_step` function like above code.  
-  
-# Consideration (Some trick option)
+First, we modify the ```LlamaForCausalLM Class```.   
+   
 ```python
-# In trainer.py, maybe line 1598.
-def _inner_training_loop(...):
-  ##################################
-  # line pass until maybe 1800 line.
-  # This code is abstrct.
-  ##################################
+# In modelling_llama.py
+class LlamaModel(LlamaPreTrainedModel):
+    def __init__(self, config: LlamaConfig):
+        (... Define Model...)
 
-  # Maybe line 1844,
-  for epoch in range(epochs_trained, num_train_epochs):
+    # We modify the below code.
+    @add_start_docstrings_to_model_forward(LLAMA_INPUTS_DOCSTRING)
+    def forward(
+        self,
+        train_opt: bool,
+        input_ids: torch.LongTensor = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.LongTensor] = None,
+        past_key_values: Optional[List[torch.FloatTensor]] = None,
+        inputs_embeds: Optional[torch.FloatTensor] = None,
+        use_cache: Optional[bool] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+    ) -> Union[Tuple, BaseModelOutputWithPast]:
+        
+        (...Define argument...)
 
-    # ...(some training code)...
+        # Here, we add the noisy embedding method.
+        if inputs_embeds is None:
+            inputs_embeds = self.embed_tokens(input_ids)
 
-    if:
-        (...)
-    # Maybe line 1950,
-    else:
-        try:
-            self.accelerator.clip_grad_norm_(
-                model.parameters(),
-                args.max_grad_norm,
-            )
-        except:
-            pass
+            # NEFTuning
+            if train_opt: # If training,
+              #print("Noisy embedding~")
+              dims = torch.tensor(inputs_embeds.size(1) * inputs_embeds.size(2))
+              mag_norm = 15/torch.sqrt(dims) # noisy_alpha/torch.sqrt(dims)
+              inputs_embeds = inputs_embeds + torch.zeros_like(inputs_embeds).uniform_(-mag_norm, mag_norm)
 
-    # Optimizer step
-    optimizer_was_run = True
-    if is_torch_tpu_available():
-        if self.do_grad_scaling:
-            self.scaler.step(self.optimizer)
-            self.scaler.update()
-        else:
-            # tpu-comment: accelerate wrapped optimizers call xm.optimizer_step
-            self.optimizer.step()
-    elif self.do_grad_scaling:
-        #print("here?")
-        scale_before = self.scaler.get_scale()
-        self.scaler.step(self.optimizer)
-        self.scaler.update()
-        scale_after = self.scaler.get_scale()
-        optimizer_was_run = scale_before <= scale_after
-    else:
-        try:
-            self.optimizer.step()
-        except: 
-            print("Ignoring")
-            pass
-        optimizer_was_run = not self.accelerator.optimizer_step_was_skipped
-
-    # ...(Other code)...
-
-    return TrainOutput(self.state.global_step, train_loss, metrics)
+        # Below ... embed positions and training ...
 ```
-I add the *try~except* condition in `clip_grad_norm_` and `self.optimizer.step()`.   
-  
+Second, we modify the ```LlamaModel Class```.   
+   
 ```python
 # In finetune.py
 if NEFTune:
@@ -205,8 +143,11 @@ if NEFTune:
 else:
   print("Done!!")
 ```
-> Consider the `transformers` version.  
-  
+> Consider the `transformers` version.   
+
+# Training code
+(coming soon...)
+   
 # Model benchmark
 (coming soon...)  
 
