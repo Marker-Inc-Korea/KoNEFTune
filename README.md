@@ -170,7 +170,8 @@ inputs['inputs_embeds'] = delta + embeds_init
 inputs['input_ids'] = None
 ### add noise to embeds
 ```
-You can apply above code, in your custom code.  
+You can apply above code, in your custom code.   
+When use above code, you need to add this code maybe in ```trainer.py -> training_step' function```.  
 
 # References
 [NEFTune github](https://github.com/neelsjain/NEFTune/tree/main)  
