@@ -42,8 +42,9 @@ model = LlamaForCausalLM.from_pretrained(
 tokenizer = LlamaTokenizer.from_pretrained(base_model) # Llama2
 print(type(model)) # <class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'>
 ```
-Here, you can see the model class is ```LlamaForCausalLM```.  
+Here, you can see the class of model is ```LlamaForCausalLM```.  
 **Now, You need to follow the below two steps!**  
+> You can see the [our modified code]('./KoNEFT_transformers/modeling_llama.py).
    
 ```python
 class LlamaForCausalLM(LlamaPreTrainedModel):
