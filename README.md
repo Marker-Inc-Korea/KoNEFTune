@@ -2,7 +2,7 @@
 <div align='center'>
 <img src="./Koisy-llama/Koisy_llama.JPG"/>   
 <br>
-<strong>Random Noisy Embeddings with fine-tuning 방법론을 llama2에 적용한 코지라마(Kosy🍵-llama)</strong>  
+<strong>Random Noisy Embeddings with fine-tuning 방법론을 llama2에 적용한 코지라마(Kosy🍵llama)</strong>  
     
 ---
 </div>
