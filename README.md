@@ -28,7 +28,7 @@ def NEFTune(model, noise_alpha=5):
     return model
 ```
 You need to consider the ```embed_tokens``` location in your base model.  
-> In my case, there is a 'infinitly recursive error' when diretly use. So, I modified and applied this code in ```Llama``` class.  
+> In my case, there is a 'infinitly recursive error' when diretly use. So, I introduced [new method](#Method) (for Ko-LLM).
   
 # Method: Applying Noisy Embedding
 ```python
