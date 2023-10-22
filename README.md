@@ -228,5 +228,6 @@ You can apply above code, in your custom code.
 When use above code, you need to add this code maybe in ```trainer.py -> training_step' function```.  
 
 # References
+[Platypus github](https://github.com/arielnlee/Platypus)  
 [NEFTune github](https://github.com/neelsjain/NEFTune/tree/main)  
 [KO-platypus🥮](https://github.com/Marker-Inc-Korea/KO-Platypus)  
