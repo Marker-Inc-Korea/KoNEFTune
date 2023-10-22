@@ -125,7 +125,7 @@ class LlamaModel(LlamaPreTrainedModel):
 
             # NEFTuning
             if train_opt: # If training,
-              #print("Noisy embedding~")
+              #print("Kyujinpy. Noisy embedding~")
               dims = torch.tensor(inputs_embeds.size(1) * inputs_embeds.size(2))
               mag_norm = 15/torch.sqrt(dims) # noisy_alpha/torch.sqrt(dims)
               inputs_embeds = inputs_embeds + torch.zeros_like(inputs_embeds).uniform_(-mag_norm, mag_norm)
@@ -147,8 +147,39 @@ else:
 > Consider the `transformers` version.   
 
 # Training code
+```python
 (coming soon...)
+```
+
+# Hyperparameters
+## Ko-Platypus2-13B-NE-v1
+| Hyperparameter      | Value 13B |
+|---------------------|--------|
+| learning rate       | 4e-4   |
+| batch size          | 16     |
+| microbatch  size    | 1      |
+| warmup steps        | 100    |
+| epochs              | 1      |
+| weight decay        | 0.     |
+| lr scheduler        | cosine |
+| lora alpha          | 16     |
+| lora rank           | 16     |
+| lora dropout        | 0.05   |
+| lora target modules | gate_proj, up_proj, down_proj|
+| cutoff length       | 4096   |
+| train on inputs     | False  |
+| group by length     | False  |
+| add eos token       | False  |
    
+| Noisy Embedding     | Value   | 
+|---------------------|---------|
+| NEFTune             | True    |
+| Noisy alpha         | 15      |
+| Distribution        | Uniform |
+
+## Ko-platypus2-13B-NE-v2
+(coming soon...)
+
 # Model benchmark
 (coming soon...)  
 
