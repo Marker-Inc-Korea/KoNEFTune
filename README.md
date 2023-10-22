@@ -231,3 +231,4 @@ When use above code, you need to add this code maybe in ```trainer.py -> trainin
 [Platypus github](https://github.com/arielnlee/Platypus)  
 [NEFTune github](https://github.com/neelsjain/NEFTune/tree/main)  
 [KO-platypus🥮](https://github.com/Marker-Inc-Korea/KO-Platypus)  
+[Korean-OpenOrca🐳](https://github.com/Marker-Inc-Korea/Korean-OpenOrca)  
