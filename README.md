@@ -177,7 +177,7 @@ else:
 | Noisy alpha         | 15      |
 | Distribution        | Uniform |
 
-## Ko-platypus2-13B-NE-v2
+## Ko-Platypus2-13B-NE-v2
 (coming soon...)
 | Hyperparameter      | Value 13B |
 |---------------------|--------|
