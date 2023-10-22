@@ -178,8 +178,7 @@ def train(
     #torch.nan_to_num(var)
     if NEFTune:
       print("Our transformers version is 4.34.1")
-      print('transformers.trainer -> find `compute loss function`.')
-      print("Default alpha value:", 5)
+      print("Default alpha value:", 15)
     else:
       print("Done!!")
 
