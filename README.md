@@ -244,3 +244,12 @@ When use above code, you need to add this code maybe in ```trainer.py -> trainin
 [NEFTune github](https://github.com/neelsjain/NEFTune/tree/main)  
 [KO-platypus🥮](https://github.com/Marker-Inc-Korea/KO-Platypus)  
 [Korean-OpenOrca🐳](https://github.com/Marker-Inc-Korea/Korean-OpenOrca)  
+
+# Koisy-llama Character
+![img0](./Koisy-llama/AI_generation.png)  
+I use [Playground_AI](https://playgroundai.com/) site.  
+Using stable-diffusion-XL and filter(Pixel_art), I made the Koisy-llama character.  
+
++) 말풍선 reference: [pinterest](https://www.pinterest.es/pin/975099756801242167/)  
+
+
