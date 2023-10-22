@@ -172,9 +172,10 @@ def train(
 
     # Original
     tokenizer = LlamaTokenizer.from_pretrained(base_model)
-    
-    print(model)
+    print(type(model))
 
+    #var = torch.tensor([float('inf'), -float('inf'), 1.15])
+    #torch.nan_to_num(var)
     if NEFTune:
       print("Our transformers version is 4.34.1")
       print('transformers.trainer -> find `compute loss function`.')
