@@ -1,4 +1,4 @@
-# KoNEFTune(Kosy🍵 llama)
+# KoNEFTune(Kosy🍵llama)
 <div align='center'>
 <img src="./Koisy-llama/Koisy_llama.JPG"/>   
 <br>
@@ -249,7 +249,7 @@ When use above code, you need to add this code maybe in ```trainer.py -> trainin
 # Kosy🍵-llama Character
 ![img0](./Koisy-llama/AI_generation.png)  
 I use [Playground_AI](https://playgroundai.com/) site.  
-Using stable-diffusion-XL and filter(Pixel_art), I made the Kosy-llama character. (Cosy: 아늑한)  
+Using stable-diffusion-XL and filter(Pixel_art), I made the Kosy🍵llama character. (Cosy: 아늑한)  
 
 +) 말풍선 reference: [pinterest](https://www.pinterest.es/pin/975099756801242167/)  
 
