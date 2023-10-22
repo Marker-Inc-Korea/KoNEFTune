@@ -1,4 +1,4 @@
-# KoNEFTune(Kosy🍵 Llama)
+# KoNEFTune(Kosy🍵 llama)
 <div align='center'>
 <img src="./Koisy-llama/Koisy_llama.JPG"/>   
 <br>
