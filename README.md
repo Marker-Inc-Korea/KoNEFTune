@@ -1,6 +1,11 @@
 # KoNEFTune
-Random Noisy Embeddings with fine-tuning 방법론을 한국어 LLM에 간단히 적용할 수 있는 repo
-
+![KpNEFT](./KoNEFT.png)  
+<div align='center'>
+<strong>Random Noisy Embeddings with fine-tuning 방법론을 한국어 LLM에 간단히 적용할 수 있는 repo</strong>
+    
+---
+</div>
+  
 # Introduction about NEFTune
 ![image](https://github.com/Marker-Inc-Korea/KoNEFTune/assets/98331298/251da313-9ff0-4e55-853c-32a247841f93)   
 ![image](https://github.com/Marker-Inc-Korea/KoNEFTune/assets/98331298/f26d794d-62ef-461b-ac92-4c9bee6db741)  
