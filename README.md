@@ -23,13 +23,14 @@ def NEFTune(model, noise_alpha=5):
             else:
                 return orig_embed(x)
         return new_func
-    ##### NOTE: this is for a LLaMA model ##### 
+    ##### NOTE: this is for a LLaMA2 model ##### 
     ##### For a different model, you need to change the attribute path to the embedding #####
     model.base_model.model.model.embed_tokens.forward = noised_embed(model.base_model.model.model.embed_tokens, noise_alpha)
     return model
 
-## In trainer.py, line 1845
+## In trainer.py, maybe line 1844
 # Define add noise
+print(model)
 model = NEFTune(model, noise_alpha=15)
 model.zero_grad()
 ```
