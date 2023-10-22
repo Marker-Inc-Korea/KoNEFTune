@@ -1,8 +1,8 @@
-# KoNEFTune
+# KoNEFTune(Kosy🍵 Llama)
 <div align='center'>
 <img src="./Koisy-llama/Koisy_llama.JPG"/>   
 <br>
-<strong>Random Noisy Embeddings with fine-tuning 방법론을 한국어 LLM에 간단히 적용할 수 있는 repo</strong>
+<strong>Random Noisy Embeddings with fine-tuning 방법론을 llama2에 적용한 코지라마(Kosy🍵-llama)</strong>  
     
 ---
 </div>
@@ -246,10 +246,10 @@ When use above code, you need to add this code maybe in ```trainer.py -> trainin
 [KO-platypus🥮](https://github.com/Marker-Inc-Korea/KO-Platypus)  
 [Korean-OpenOrca🐳](https://github.com/Marker-Inc-Korea/Korean-OpenOrca)  
 
-# Koisy-llama Character
+# Kosy🍵-llama Character
 ![img0](./Koisy-llama/AI_generation.png)  
 I use [Playground_AI](https://playgroundai.com/) site.  
-Using stable-diffusion-XL and filter(Pixel_art), I made the Koisy-llama character.  
+Using stable-diffusion-XL and filter(Pixel_art), I made the Kosy-llama character. (Cosy: 아늑한)  
 
 +) 말풍선 reference: [pinterest](https://www.pinterest.es/pin/975099756801242167/)  
 
