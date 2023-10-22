@@ -165,7 +165,7 @@ else:
 | lora alpha          | 16     |
 | lora rank           | 16     |
 | lora dropout        | 0.05   |
-| lora target modules | gate_proj, up_proj, down_proj|
+| lora target modules | gate_proj, up_proj, down_proj |
 | cutoff length       | 4096   |
 | train on inputs     | False  |
 | group by length     | False  |
@@ -179,6 +179,29 @@ else:
 
 ## Ko-platypus2-13B-NE-v2
 (coming soon...)
+| Hyperparameter      | Value 13B |
+|---------------------|--------|
+| learning rate       | NaN  |
+| batch size          | NaN  |
+| microbatch  size    | NaN  |
+| warmup steps        | NaN  |
+| epochs              | NaN  |
+| weight decay        | NaN  |
+| lr scheduler        | NaN  |
+| lora alpha          | NaN  |
+| lora rank           | NaN  |
+| lora dropout        | NaN  |
+| lora target modules | NaN  |
+| cutoff length       | NaN  |
+| train on inputs     | NaN  |
+| group by length     | NaN  |
+| add eos token       | NaN  |
+   
+| Noisy Embedding     | Value   | 
+|---------------------|---------|
+| NEFTune             | True    |
+| Noisy alpha         | 15      |
+| Distribution        | Uniform |
 
 # Model benchmark
 (coming soon...)  
