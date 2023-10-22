@@ -47,6 +47,7 @@ Here, you can see the class of model is ```LlamaForCausalLM```.
 **Now, You need to follow the below two steps!**   
   
 ```python
+# In modelling_llama.py
 class LlamaForCausalLM(LlamaPreTrainedModel):
     _tied_weights_keys = ["lm_head.weight"]
 
@@ -140,8 +141,7 @@ Second, we modify the ```LlamaModel Class```.
 # In finetune.py
 if NEFTune:
   print("Our transformers version is 4.34.1")
-  print('transformers.trainer -> find `compute loss(maybe line 2810)` or `training_step(maybe line 2750)` function.')
-  print("Default alpha value:", 5)
+  print("Default alpha value:", 15)
 else:
   print("Done!!")
 ```
