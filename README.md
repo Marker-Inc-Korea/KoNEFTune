@@ -6,7 +6,7 @@ Random Noisy Embeddings with fine-tuning 방법론을 한국어 LLM에 간단히
 ![image](https://github.com/Marker-Inc-Korea/KoNEFTune/assets/98331298/f26d794d-62ef-461b-ac92-4c9bee6db741)  
 > More detail: [NEFTune github](https://github.com/neelsjain/NEFTune/tree/main) and [NEFTune paper](https://arxiv.org/abs/2310.05914).  
 
-# Core Code2
+# Core Code
 ```python
 ## In trainer.py, define below function.
 from torch.nn import functional as F
@@ -34,27 +34,7 @@ print(model)
 model = NEFTune(model, noise_alpha=15)
 model.zero_grad()
 ```
-
-# Core Code
-```python
-embed_device = model.module.base_model.model.model.embed_tokens.weight.device
-embeds_init = model.module.base_model.model.model.embed_tokens.forward(inputs['input_ids'].to(embed_device))
-
-### add noise to embeds
-input_mask = inputs['attention_mask'].to(embeds_init) # B x L
-input_lengths = torch.sum(input_mask, 1) # B
-
-noise_ = torch.zeros_like(embeds_init).uniform_(-1,1)
-delta = noise_ * input_mask.unsqueeze(2)
-dims = input_lengths * embeds_init.size(-1)
-mag = 5 / torch.sqrt(dims) # args.neftune_alpha / torch.sqrt(dims) // alpha-> 5
-delta = (delta * mag.view(-1, 1, 1)).detach()
-inputs['inputs_embeds'] = delta + embeds_init
-inputs['input_ids'] = None
-### add noise to embeds
-```
-You can apply above code, in your custom code.  
-Or you also apply [NEFTune function](https://github.com/neelsjain/NEFTune/tree/main).  
+You need to consider the ```embed_tokens``` location in your base model.  
 
 ```python
 trainer = transformers.Trainer(
@@ -90,7 +70,27 @@ trainer = transformers.Trainer(
     # callbacks=[SavePeftModelCallback, LoadBestPeftModelCallback], # ONLY USE LoadBestPeftModelCallback if val_set_size > 0
 )
 ```
-You can see some `Trainer class` sample code in [KoNEFTune](./KoNEFT_transformers).  
+You can see some `Trainer class` sample code in [KoNEFTune](./KoNEFT_transformers).   
+
+# (Option) Another method: Applying code
+```python
+embed_device = model.module.base_model.model.model.embed_tokens.weight.device
+embeds_init = model.module.base_model.model.model.embed_tokens.forward(inputs['input_ids'].to(embed_device))
+
+### add noise to embeds
+input_mask = inputs['attention_mask'].to(embeds_init) # B x L
+input_lengths = torch.sum(input_mask, 1) # B
+
+noise_ = torch.zeros_like(embeds_init).uniform_(-1,1)
+delta = noise_ * input_mask.unsqueeze(2)
+dims = input_lengths * embeds_init.size(-1)
+mag = 5 / torch.sqrt(dims) # args.neftune_alpha / torch.sqrt(dims) // alpha-> 5
+delta = (delta * mag.view(-1, 1, 1)).detach()
+inputs['inputs_embeds'] = delta + embeds_init
+inputs['input_ids'] = None
+### add noise to embeds
+```
+You can apply above code, in your custom code.  
   
 # Method: How to applying code
 ```python
