@@ -72,25 +72,8 @@ trainer = transformers.Trainer(
 ```
 You can see some `Trainer class` sample code in [KoNEFTune](./KoNEFT_transformers).   
 
-# (Option) Another method: Applying code
-```python
-embed_device = model.module.base_model.model.model.embed_tokens.weight.device
-embeds_init = model.module.base_model.model.model.embed_tokens.forward(inputs['input_ids'].to(embed_device))
-
-### add noise to embeds
-input_mask = inputs['attention_mask'].to(embeds_init) # B x L
-input_lengths = torch.sum(input_mask, 1) # B
-
-noise_ = torch.zeros_like(embeds_init).uniform_(-1,1)
-delta = noise_ * input_mask.unsqueeze(2)
-dims = input_lengths * embeds_init.size(-1)
-mag = 5 / torch.sqrt(dims) # args.neftune_alpha / torch.sqrt(dims) // alpha-> 5
-delta = (delta * mag.view(-1, 1, 1)).detach()
-inputs['inputs_embeds'] = delta + embeds_init
-inputs['input_ids'] = None
-### add noise to embeds
-```
-You can apply above code, in your custom code.  
+# Training code
+(coming soon...)
   
 # Method: How to applying code
 ```python
@@ -226,6 +209,26 @@ else:
   
 # Model benchmark
 (coming soon...)  
+
+# (Option) Another method: Applying code
+```python
+embed_device = model.module.base_model.model.model.embed_tokens.weight.device
+embeds_init = model.module.base_model.model.model.embed_tokens.forward(inputs['input_ids'].to(embed_device))
+
+### add noise to embeds
+input_mask = inputs['attention_mask'].to(embeds_init) # B x L
+input_lengths = torch.sum(input_mask, 1) # B
+
+noise_ = torch.zeros_like(embeds_init).uniform_(-1,1)
+delta = noise_ * input_mask.unsqueeze(2)
+dims = input_lengths * embeds_init.size(-1)
+mag = 5 / torch.sqrt(dims) # args.neftune_alpha / torch.sqrt(dims) // alpha-> 5
+delta = (delta * mag.view(-1, 1, 1)).detach()
+inputs['inputs_embeds'] = delta + embeds_init
+inputs['input_ids'] = None
+### add noise to embeds
+```
+You can apply above code, in your custom code.  
 
 # References
 [NEFTune github](https://github.com/neelsjain/NEFTune/tree/main)  
