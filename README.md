@@ -43,9 +43,8 @@ tokenizer = LlamaTokenizer.from_pretrained(base_model) # Llama2
 print(type(model)) # <class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'>
 ```
 Here, you can see the class of model is ```LlamaForCausalLM```.  
-**Now, You need to follow the below two steps!**  
-> You can see the [our modified code]('./KoNEFT_transformers/modeling_llama.py).
-   
+**Now, You need to follow the below two steps!**   
+  
 ```python
 class LlamaForCausalLM(LlamaPreTrainedModel):
     _tied_weights_keys = ["lm_head.weight"]
@@ -134,7 +133,8 @@ class LlamaModel(LlamaPreTrainedModel):
         # Below ... embed positions and training ...
 ```
 Second, we modify the ```LlamaModel Class```.   
-   
+> You can see the [our modified code]('./KoNEFT_transformers/modeling_llama.py).  
+    
 ```python
 # In finetune.py
 if NEFTune:
