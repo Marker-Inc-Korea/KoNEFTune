@@ -227,7 +227,13 @@ inputs['input_ids'] = None
 ```
 You can apply above code, in your custom code.   
 When use above code, you need to add this code maybe in ```trainer.py -> training_step' function```.  
-
+  
+# TODO
+- [x] Introduced the KoNEFT method.
+- [ ] Training Ko-platypus.  
+- [ ] Traingin KoR-Orca-Platypus.    
+- [ ] User can adjust the noisy_alpha with config(parser).  
+  
 # References
 [Platypus github](https://github.com/arielnlee/Platypus)  
 [NEFTune github](https://github.com/neelsjain/NEFTune/tree/main)  
