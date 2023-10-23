@@ -4,11 +4,14 @@ from typing import List
 
 import fire
 import torch
-import transformers
+#import transformers
+import kosy_transformers
 from datasets import load_dataset
 
-from transformers import TrainerCallback, TrainingArguments, TrainerState, TrainerControl
-from transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
+#from transformers import TrainerCallback, TrainingArguments, TrainerState, TrainerControl
+#from transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
+from kosy_transformers import TrainerCallback, TrainingArguments, TrainerState, TrainerControl
+from kosy_transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
 from torch.nn import functional as F
 
 from peft import (
@@ -18,8 +21,10 @@ from peft import (
     set_peft_model_state_dict
 )
 
-from transformers import LlamaForCausalLM, LlamaTokenizer
-from transformers import AutoModelForCausalLM, AutoTokenizer
+#from transformers import LlamaForCausalLM, LlamaTokenizer
+#from transformers import AutoModelForCausalLM, AutoTokenizer
+from kosy_transformers import LlamaForCausalLM, LlamaTokenizer
+from kosy_transformers import AutoModelForCausalLM, AutoTokenizer
 
 from utils.prompter import Prompter
 
@@ -56,23 +61,6 @@ class LoadBestPeftModelCallback(TrainerCallback):
         set_peft_model_state_dict(model, adapters_weights)
         return control
 
-def NEFTune_func(model, noise_alpha=5):
-    def noised_embed(orig_embed, noise_alpha):
-        def new_func(x):
-            # during training, we add noise to the embedding
-            # during generation, we don't add noise to the embedding
-            if model.training:
-                embed_init = orig_embed(x)
-                dims = torch.tensor(embed_init.size(1) * embed_init.size(2))
-                mag_norm = noise_alpha/torch.sqrt(dims)
-                return embed_init + torch.zeros_like(embed_init).uniform_(-mag_norm, mag_norm)
-            else:
-                return orig_embed(x)
-        return new_func
-    ##### NOTE: this is for a LLaMA model ##### 
-    ##### For a different model, you need to change the attribute path to the embedding #####
-    model.model.embed_tokens.forward = noised_embed(model.model.embed_tokens, noise_alpha)
-
 def train(
     # model/data params
     base_model: str = "", 
@@ -105,7 +93,6 @@ def train(
     resume_from_checkpoint: str = None,  # either training checkpoint or final adapter
     prompt_template_name: str = "alpaca",
     # NEFTune params
-    NEFTune: bool = False,
     noise_alpha: int = 5
 ):
     if int(os.environ.get("LOCAL_RANK", 0)) == 0:
@@ -173,15 +160,6 @@ def train(
     # Original
     tokenizer = LlamaTokenizer.from_pretrained(base_model)
     print(type(model))
-
-    #var = torch.tensor([float('inf'), -float('inf'), 1.15])
-    #torch.nan_to_num(var)
-    if NEFTune:
-      print("Our transformers version is 4.34.1")
-      print("Default alpha value:", 15)
-    else:
-      print("Done!!")
-
     print("length of tokenizer:",len(tokenizer))
 
     bos = tokenizer.bos_token_id
@@ -300,11 +278,12 @@ def train(
 
     #use_wandb=False # adding
     
-    trainer = transformers.Trainer(
+    trainer = kosy_transformers.Trainer(
         model=model,
+        noise_alpha=noise_alpha,
         train_dataset=train_data,
         eval_dataset=val_data,
-        args=transformers.TrainingArguments(
+        args=kosy_transformers.TrainingArguments(
             per_device_train_batch_size=micro_batch_size,
             gradient_accumulation_steps=gradient_accumulation_steps,
             warmup_steps=warmup_steps,
@@ -327,7 +306,7 @@ def train(
             report_to="wandb" if use_wandb else None,
             run_name=wandb_run_name if use_wandb else None,
         ),
-        data_collator=transformers.DataCollatorForSeq2Seq(
+        data_collator=kosy_transformers.DataCollatorForSeq2Seq(
             tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
         ),
         # callbacks=[SavePeftModelCallback, LoadBestPeftModelCallback], # ONLY USE LoadBestPeftModelCallback if val_set_size > 0
