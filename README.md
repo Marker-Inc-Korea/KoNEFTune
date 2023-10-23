@@ -144,9 +144,9 @@ Second, we modify the ```LlamaModel Class```.
 > You can see the [our modified code](./KoNEFT_transformers/modeling_llama.py).  
     
 ```python
-# In finetune.py
+# In modified version,
 if NEFTune:
-  print("Our transformers version is 4.34.1")
+  print("We use the transformers version is 4.34.1")
   print("Default alpha value:", 15)
 else:
   print("Done!!")
