@@ -241,6 +241,7 @@ When use above code, you need to add this code maybe in ```trainer.py -> 'traini
 - [ ] User can adjust the noisy_alpha with config(parser).  
   
 # References
+[transformers](https://pypi.org/project/transformers/)  
 [Platypus github](https://github.com/arielnlee/Platypus)  
 [NEFTune github](https://github.com/neelsjain/NEFTune/tree/main)  
 [KO-platypus🥮](https://github.com/Marker-Inc-Korea/KO-Platypus)  
