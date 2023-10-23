@@ -167,7 +167,7 @@ class LlamaModel(LlamaPreTrainedModel):
             if train_opt: # If training,
               #print("Kyujinpy. Noisy embedding~")
               dims = torch.tensor(inputs_embeds.size(1) * inputs_embeds.size(2))
-              mag_norm = 15/torch.sqrt(dims) # noisy_alpha/torch.sqrt(dims)
+              mag_norm = [...noisy_alpha...]/torch.sqrt(dims) # noise_alpha/torch.sqrt(dims)
               inputs_embeds = inputs_embeds + torch.zeros_like(inputs_embeds).uniform_(-mag_norm, mag_norm)
 
         # Below ... embed positions and training ...
@@ -180,7 +180,6 @@ Second, we modify the ```LlamaModel Class```.
 if NEFTune:
   print("We modified the transformers version is 4.34.1")  
   print("The training code base is 'Platypus'.")  
-  print("Default alpha value:", 15)
 else:
   print("Done!!")
 ```
@@ -201,7 +200,7 @@ input_lengths = torch.sum(input_mask, 1) # B
 noise_ = torch.zeros_like(embeds_init).uniform_(-1,1)
 delta = noise_ * input_mask.unsqueeze(2)
 dims = input_lengths * embeds_init.size(-1)
-mag = 5 / torch.sqrt(dims) # args.neftune_alpha / torch.sqrt(dims) // alpha-> 5
+mag = 5 / torch.sqrt(dims) # args.neftune_alpha / torch.sqrt(dims)
 delta = (delta * mag.view(-1, 1, 1)).detach()
 inputs['inputs_embeds'] = delta + embeds_init
 inputs['input_ids'] = None
