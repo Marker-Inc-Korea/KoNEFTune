@@ -266,7 +266,7 @@ When use above code, you need to add this code maybe in ```trainer.py -> 'traini
 - [x] Introduced the NEFTune method.
 - [ ] Training Kosy-platypus.  
 - [ ] Training Kosy-Orca-Platypus.    
-- [ ] User can adjust the noisy_alpha with config(parser).  
+- [x] User can adjust the noisy_alpha with config(parser).  
   
 # References
 [transformers](https://pypi.org/project/transformers/)  
