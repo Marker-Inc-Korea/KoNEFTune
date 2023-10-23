@@ -146,7 +146,8 @@ Second, we modify the ```LlamaModel Class```.
 ```python
 # In modified version,
 if NEFTune:
-  print("We use the transformers version is 4.34.1")
+  print("We use the transformers version is 4.34.1")  
+  print("The training code base is 'Platypus'.")  
   print("Default alpha value:", 15)
 else:
   print("Done!!")
