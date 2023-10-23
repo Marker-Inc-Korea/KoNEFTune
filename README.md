@@ -179,7 +179,7 @@ Second, we modify the ```LlamaModel Class```.
 # In modified version,
 if NEFTune:
   print("We modified the transformers version is 4.34.1")  
-  print("The training code base is 'Platypus'.")  
+  print("Thank you for platypus and transformers!")
 else:
   print("Done!!")
 ```
