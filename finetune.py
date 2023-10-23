@@ -76,9 +76,9 @@ def train(
     lr_scheduler: str = "cosine",
     warmup_steps: int = 100, 
     # lora hyperparams
-    lora_r: int = 16,
+    lora_r: int = 64,
     lora_alpha: int = 16,
-    lora_dropout: float = 0.05,
+    lora_dropout: float = 0.1,
     # from peft docs: ["q_proj", "k_proj", "v_proj", "o_proj", "fc_in", "fc_out", "wte", "gate_proj", "down_proj", "up_proj"]
     lora_target_modules: List[str] = ["gate_proj", "down_proj", "up_proj"],
     # llm hyperparams
