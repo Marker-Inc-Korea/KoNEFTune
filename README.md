@@ -275,7 +275,7 @@ When use above code, you need to add this code maybe in ```trainer.py -> 'traini
 [KO-platypus🥮](https://github.com/Marker-Inc-Korea/KO-Platypus)  
 [Korean-OpenOrca🐳](https://github.com/Marker-Inc-Korea/Korean-OpenOrca)  
 
-# Kosy🍵-llama Character
+# Kosy🍵llama Character
 ![img0](./Koisy-llama/AI_generation.png)  
 I use [Playground_AI](https://playgroundai.com/) site.  
 Using stable-diffusion-XL and filter(Pixel_art), I made the Kosy🍵llama character. (Cosy: 아늑한)  
