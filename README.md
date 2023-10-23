@@ -156,9 +156,27 @@ else:
 
 # Training code
 ```python
-(coming soon...)
+!torchrun finetune.py \
+    --base_model [...base_model...] \
+    --data-path [...dataset...] \
+    --output_dir [...output_dir...] \
+    --batch_size [...batch_size...] \
+    --num_epochs [...epochs...] \
+    --learning_rate [...learning_rate...] \
+    --lora_r [...lora_r...] \
+    --lora_alpha [...lora_alpha...] \
+    --lora_dropout [...lora_dropout...] \
+    --lora_target_modules [...LORA_training_layer...] \
+    --train_on_inputs False \
+    --add_eos_token False \
+    --group_by_length False \
+    --prompt_template_name alpaca \
+    --lr_scheduler [...lr_scheduler...] \
+    --warmup_steps [...warmup_step...] \
+    --noise_alpha [...NEFT_alpha...] 
 ```
-
+> There are another hyperparameters option in [code](./finetune.py).  
+  
 # Hyperparameters
 ## Kosy-Platypus2-13B-NE-v1
 | Hyperparameter      | Value 13B |
