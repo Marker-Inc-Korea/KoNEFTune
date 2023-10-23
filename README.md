@@ -11,7 +11,38 @@
 ![image](https://github.com/Marker-Inc-Korea/KoNEFTune/assets/98331298/251da313-9ff0-4e55-853c-32a247841f93)   
 ![image](https://github.com/Marker-Inc-Korea/KoNEFTune/assets/98331298/f26d794d-62ef-461b-ac92-4c9bee6db741)  
 > More detail: [NEFTune github](https://github.com/neelsjain/NEFTune/tree/main) and [NEFTune paper](https://arxiv.org/abs/2310.05914).  
-
+  
+# Quick training code
+```python
+## In finetune.py, 
+import kosy_transformers
+from kosy_transformers import TrainerCallback, TrainingArguments, TrainerState, TrainerControl
+from kosy_transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
+from kosy_transformers import LlamaForCausalLM, LlamaTokenizer
+from kosy_transformers import AutoModelForCausalLM, AutoTokenizer
+```   
+```python
+!torchrun finetune.py \
+    --base_model [...base_model...] \
+    --data-path [...dataset...] \
+    --output_dir [...output_dir...] \
+    --batch_size [...batch_size...] \
+    --num_epochs [...epochs...] \
+    --learning_rate [...learning_rate...] \
+    --lora_r [...lora_r...] \
+    --lora_alpha [...lora_alpha...] \
+    --lora_dropout [...lora_dropout...] \
+    --lora_target_modules [...LORA_training_layer...] \
+    --train_on_inputs False \
+    --add_eos_token False \
+    --group_by_length False \
+    --prompt_template_name alpaca \
+    --lr_scheduler [...lr_scheduler...] \
+    --warmup_steps [...warmup_step...] \
+    --noise_alpha [...NEFT_alpha...] 
+```
+> There are another hyperparameters option in [code](./finetune.py).  
+  
 # Core Code
 ```python
 from torch.nn import functional as F
@@ -153,38 +184,7 @@ else:
   print("Done!!")
 ```
 > You need to consider the `transformers` version.   
-
-# Training code
-```python
-## In finetune.py, 
-import kosy_transformers
-from kosy_transformers import TrainerCallback, TrainingArguments, TrainerState, TrainerControl
-from kosy_transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
-from kosy_transformers import LlamaForCausalLM, LlamaTokenizer
-from kosy_transformers import AutoModelForCausalLM, AutoTokenizer
-```   
-```python
-!torchrun finetune.py \
-    --base_model [...base_model...] \
-    --data-path [...dataset...] \
-    --output_dir [...output_dir...] \
-    --batch_size [...batch_size...] \
-    --num_epochs [...epochs...] \
-    --learning_rate [...learning_rate...] \
-    --lora_r [...lora_r...] \
-    --lora_alpha [...lora_alpha...] \
-    --lora_dropout [...lora_dropout...] \
-    --lora_target_modules [...LORA_training_layer...] \
-    --train_on_inputs False \
-    --add_eos_token False \
-    --group_by_length False \
-    --prompt_template_name alpaca \
-    --lr_scheduler [...lr_scheduler...] \
-    --warmup_steps [...warmup_step...] \
-    --noise_alpha [...NEFT_alpha...] 
-```
-> There are another hyperparameters option in [code](./finetune.py).  
-  
+   
 # Hyperparameters
 ## Kosy-Platypus2-13B-NE-v1
 | Hyperparameter      | Value 13B |
