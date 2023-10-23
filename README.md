@@ -152,7 +152,7 @@ if NEFTune:
 else:
   print("Done!!")
 ```
-> Consider the `transformers` version.   
+> You need to consider the `transformers` version.   
 
 # Training code
 ```python
