@@ -156,6 +156,14 @@ else:
 
 # Training code
 ```python
+## In finetune.py, 
+import kosy_transformers
+from kosy_transformers import TrainerCallback, TrainingArguments, TrainerState, TrainerControl
+from kosy_transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
+from kosy_transformers import LlamaForCausalLM, LlamaTokenizer
+from kosy_transformers import AutoModelForCausalLM, AutoTokenizer
+```   
+```python
 !torchrun finetune.py \
     --base_model [...base_model...] \
     --data-path [...dataset...] \
