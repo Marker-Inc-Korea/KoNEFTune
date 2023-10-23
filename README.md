@@ -14,7 +14,8 @@
   
 # Quick training code
 ```python
-## In finetune.py, 
+## In finetune.py,
+## Only support the llama base model in code. 
 import kosy_transformers
 from kosy_transformers import TrainerCallback, TrainingArguments, TrainerState, TrainerControl
 from kosy_transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
