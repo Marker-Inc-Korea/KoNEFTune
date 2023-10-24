@@ -8,8 +8,7 @@
 </div>
   
 # Introduction about NEFTune
-![image](https://github.com/Marker-Inc-Korea/KoNEFTune/assets/98331298/251da313-9ff0-4e55-853c-32a247841f93)   
-![image](https://github.com/Marker-Inc-Korea/KoNEFTune/assets/98331298/f26d794d-62ef-461b-ac92-4c9bee6db741)  
+![image](https://github.com/neelsjain/NEFTune/raw/main/imgs/AlpacaEval_Figue1.png)    
 > More detail: [NEFTune github](https://github.com/neelsjain/NEFTune/tree/main) and [NEFTune paper](https://arxiv.org/abs/2310.05914).  
   
 # Quick training code
