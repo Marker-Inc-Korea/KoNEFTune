@@ -179,6 +179,7 @@ Second, we modify the ```LlamaModel Class```.
 if NEFTune:
   print("We modified the transformers version is 4.34.1")  
   print("Thank you for platypus and transformers!")
+  print("We only support the llama class")
 else:
   print("Done!!")
 ```
