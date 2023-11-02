@@ -220,7 +220,7 @@ When use above code, you need to add this code maybe in ```trainer.py -> 'traini
   
 # TODO
 - [x] Introduced the NEFTune method.
-- [ ] Training Kosy-platypus.  
+- [x] Training Kosy-platypus.  
 - [ ] Training Kosy-Orca-Platypus.    
 - [x] User can adjust the noisy_alpha with config(parser).  
   
