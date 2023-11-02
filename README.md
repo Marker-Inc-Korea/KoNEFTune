@@ -192,7 +192,7 @@ else:
 | [Ko-Platypus2-13B](https://huggingface.co/kyujinpy/KO-Platypus2-13B) | 45.60 | 44.20 | 54.31 | 42.47 | 44.41 | 42.62 |
 | *NEFT(🍵kosy)+MLP-v1 | 43.64 | 43.94 | 53.88 | 42.68 | 43.46 | 34.24 |   
 | *NEFT(🍵kosy)+MLP-v2 | 45.45 | 44.20 | 54.56 | 42.60 | 42.68 | 42.98 |   
-| ***NEFT(🍵kosy)+MLP-v3** | 46.31 | 43.34 | 54.54 | 43.38 | 44.11 | 46.16 |  
+| [***NEFT(🍵kosy)+MLP-v3**](https://huggingface.co/kyujinpy/Kosy-platypus2-13B-v3) | **46.31** | 43.34 | 54.54 | 43.38 | 44.11 | 46.16 |  
 | NEFT(🍵kosy)+Attention | 44.92 |42.92 | 54.48 | 42.99 | 43.00 | 41.20 |
 | NEFT(🍵kosy) | 45.08 | 43.09 | 53.61 | 41.06 | 43.47 | 43.21 |  
 > *Different Hyperparameters such that learning_rate, batch_size, epoch, etc... 
